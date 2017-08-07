@@ -41,9 +41,15 @@ namespace AsyncAnalyzers.Test.Helpers
 
         public DiagnosticResultLocation[] Locations
         {
-            get => _locations ?? (_locations = new DiagnosticResultLocation[] { });
+            get
+            {
+                return _locations ?? (_locations = new DiagnosticResultLocation[] { });
+            }
 
-            set => _locations = value;
+            set
+            {
+                _locations = value;
+            }
         }
 
         public DiagnosticSeverity Severity { get; set; }
