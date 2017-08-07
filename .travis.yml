@@ -6,4 +6,4 @@ install:
   - nuget restore AsyncAnalyzers.sln
 script:
   - xbuild /p:Configuration=Release solution-name.sln
-  - mono ./packages/xunit.runner.console.2.2.0/tools/xunit.console.exe ./AsyncAnalyzers.Test/bin/Release/AsyncAnalyzers.Tests.dll
+  - mono ./packages/xunit.runner.console.2.2.0/tools/xunit.console.exe ./AsyncAnalyzers.Test/bin/Release/AsyncAnalyzers.Test.dll
