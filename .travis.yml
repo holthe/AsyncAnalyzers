@@ -1,0 +1,10 @@
+language: csharp
+solution: AsyncAnalyzers.sln
+before_install:
+  - gem install albacore -v 2.6.1
+install:
+  - nuget restore AsyncAnalyzers.sln
+  - nuget install xunit.runners -Version 2.2.0 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release solution-name.sln
+  - mono ./testrunner/xunit.runners.2.2.0/tools/xunit.console.exe ./AsyncAnalyzers.Test/bin/Release/AsyncAnalyzers.Tests.dll
