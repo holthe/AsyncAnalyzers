@@ -8,7 +8,7 @@ Compilation and build status is provided by [Travis CI](https://travis-ci.org). 
 Branch|Status
 ---|---
 master|[![Build Status](https://travis-ci.org/holthe/AsyncAnalyzers.svg?branch=master)](https://travis-ci.org/holthe/AsyncAnalyzers)
-develop[![Build Status](https://travis-ci.org/holthe/AsyncAnalyzers.svg?branch=develop)](https://travis-ci.org/holthe/AsyncAnalyzers)
+develop|[![Build Status](https://travis-ci.org/holthe/AsyncAnalyzers.svg?branch=develop)](https://travis-ci.org/holthe/AsyncAnalyzers)
 
 ## Getting Started
 
