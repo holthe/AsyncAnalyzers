@@ -1,9 +1,5 @@
-# AsyncAnalyzers
+# AsyncAnalyzers [![Build Status](https://travis-ci.org/holthe/AsyncAnalyzers.svg?branch=master)](https://travis-ci.org/holthe/AsyncAnalyzers) [![Latest version](https://img.shields.io/nuget/v/AsyncAnalyzers.svg)](https://www.nuget.org/packages/AsyncAnalyzers) [![License](http://img.shields.io/:license-MIT-red.svg)](LICENSE.md)
 > This repository contains a TAP method naming diagnostic extension for the .NET Compiler Platform ("Roslyn").
-
-[![Build Status](https://travis-ci.org/holthe/AsyncAnalyzers.svg?branch=master)](https://travis-ci.org/holthe/AsyncAnalyzers)
-[![Latest version](https://img.shields.io/nuget/v/AsyncAnalyzers.svg)](https://www.nuget.org/packages/AsyncAnalyzers)
-[![License](http://img.shields.io/:license-MIT-red.svg)](LICENSE.md)
 
 ## Build Status
 
@@ -37,6 +33,5 @@ rake xunit_tests
 
 which assumes that the solution has previously been built for **Release** configuration and that artifacts from this build is present in the output folders for the _AsyncAnalyzers_ and _AsyncAnalyzers.Test_ projects.
 
-## License
-
-This project is licensed under the MIT License - see [![License](http://img.shields.io/:license-MIT-red.svg)](LICENSE.md) for details.
+## License [![License](http://img.shields.io/:license-MIT-red.svg)](LICENSE.md)
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
