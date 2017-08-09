@@ -15,14 +15,14 @@ namespace AsyncAnalyzers.Test
         {
             _expectedDiagnosticResultForMissingAsync = new DiagnosticResult
             {
-                Id = AsyncMethodNameAnalyzer.DiagnosticIdForMissingAsync,
+                Id = AsyncMethodNameAnalyzer.DiagnosticIdForMissingAsyncSuffix,
                 Message = "\'X\' does not end with Async",
                 Severity = DiagnosticSeverity.Error
             };
 
             _expectedDiagnosticResultForSuperfluousAsync = new DiagnosticResult
             {
-                Id = AsyncMethodNameAnalyzer.DiagnosticIdForSuperFluousAsync,
+                Id = AsyncMethodNameAnalyzer.DiagnosticIdForSuperFluousAsyncSuffix,
                 Message = "\'XAsync\' is not a TAP method but ends with Async",
                 Severity = DiagnosticSeverity.Error
             };
@@ -347,7 +347,7 @@ namespace AsyncAnalyzers.Test
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()
         {
-            return new AsyncCodeFixProvider();
+            return new AsyncSuffixCodeFixProvider();
         }
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()

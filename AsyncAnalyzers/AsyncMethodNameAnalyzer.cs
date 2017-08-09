@@ -8,22 +8,22 @@ namespace AsyncAnalyzers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AsyncMethodNameAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticIdForMissingAsync = "Missing Async";
-        public const string DiagnosticIdForSuperFluousAsync = "Superfluous Async";
+        public const string DiagnosticIdForMissingAsyncSuffix = "Missing Async";
+        public const string DiagnosticIdForSuperFluousAsyncSuffix = "Superfluous Async";
 
         private const string Category = "Naming";
-        private static readonly string _titleForMissingAsync = "TAP methods must end with Async";
-        private static readonly string _messageFormatForMissingAsync = "'{0}' does not end with Async";
-        private static readonly string _descriptionForMissingAsync = "TAP methods should have the Async suffix.";
+        private const string TitleForMissingAsync = "TAP methods must end with Async";
+        private const string MessageFormatForMissingAsync = "'{0}' does not end with Async";
+        private const string DescriptionForMissingAsync = "TAP methods should have the Async suffix.";
 
-        private static readonly string _titleForSuperfluousAsync = "Only TAP methods must end with Async";
-        private static readonly string _messageFormatForSuperfluousAsync = "'{0}' is not a TAP method but ends with Async";
-        private static readonly string _descriptionForSuperfluousAsync = "Only TAP methods should have the Async suffix.";
+        private const string TitleForSuperfluousAsync = "Only TAP methods must end with Async";
+        private const string MessageFormatForSuperfluousAsync = "'{0}' is not a TAP method but ends with Async";
+        private const string DescriptionForSuperfluousAsync = "Only TAP methods should have the Async suffix.";
 
-        private static readonly DiagnosticDescriptor _ruleForMissingAsync = new DiagnosticDescriptor(DiagnosticIdForMissingAsync, _titleForMissingAsync, _messageFormatForMissingAsync, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _descriptionForMissingAsync);
-        private static readonly DiagnosticDescriptor _ruleForSuperfluousAsync = new DiagnosticDescriptor(DiagnosticIdForSuperFluousAsync, _titleForSuperfluousAsync, _messageFormatForSuperfluousAsync, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: _descriptionForSuperfluousAsync);
+        private static readonly DiagnosticDescriptor RuleForMissingAsyncSuffix = new DiagnosticDescriptor(DiagnosticIdForMissingAsyncSuffix, TitleForMissingAsync, MessageFormatForMissingAsync, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: DescriptionForMissingAsync);
+        private static readonly DiagnosticDescriptor RuleForSuperfluousAsyncSuffix = new DiagnosticDescriptor(DiagnosticIdForSuperFluousAsyncSuffix, TitleForSuperfluousAsync, MessageFormatForSuperfluousAsync, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: DescriptionForSuperfluousAsync);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(_ruleForMissingAsync, _ruleForSuperfluousAsync);
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(RuleForMissingAsyncSuffix, RuleForSuperfluousAsyncSuffix);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -46,7 +46,7 @@ namespace AsyncAnalyzers
             {
                 foreach (var location in methodSymbol.Locations)
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(_ruleForMissingAsync, location, methodSymbol.Name));
+                    context.ReportDiagnostic(Diagnostic.Create(RuleForMissingAsyncSuffix, location, methodSymbol.Name));
                 }
             }
 
@@ -55,7 +55,7 @@ namespace AsyncAnalyzers
             {
                 foreach (var location in methodSymbol.Locations)
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(_ruleForSuperfluousAsync, location, methodSymbol.Name));
+                    context.ReportDiagnostic(Diagnostic.Create(RuleForSuperfluousAsyncSuffix, location, methodSymbol.Name));
                 }
             }
         }

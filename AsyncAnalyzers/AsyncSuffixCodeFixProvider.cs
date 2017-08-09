@@ -10,13 +10,13 @@ using Microsoft.CodeAnalysis.Rename;
 
 namespace AsyncAnalyzers
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(AsyncCodeFixProvider))]
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(AsyncSuffixCodeFixProvider))]
     [Shared]
-    public class AsyncCodeFixProvider : CodeFixProvider
+    public class AsyncSuffixCodeFixProvider : CodeFixProvider
     {
-        private const string Title = "Append Async suffix.";
+        private const string Title = "Append missing or remove superfluous Async suffix.";
 
-        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AsyncMethodNameAnalyzer.DiagnosticIdForMissingAsync, AsyncMethodNameAnalyzer.DiagnosticIdForSuperFluousAsync);
+        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AsyncMethodNameAnalyzer.DiagnosticIdForMissingAsyncSuffix, AsyncMethodNameAnalyzer.DiagnosticIdForSuperFluousAsyncSuffix);
 
         public sealed override FixAllProvider GetFixAllProvider()
         {
@@ -38,7 +38,7 @@ namespace AsyncAnalyzers
             context.RegisterCodeFix(
                 CodeAction.Create(
                     title: Title,
-                    createChangedSolution: c => diagnostic.Id == AsyncMethodNameAnalyzer.DiagnosticIdForMissingAsync
+                    createChangedSolution: c => diagnostic.Id == AsyncMethodNameAnalyzer.DiagnosticIdForMissingAsyncSuffix
                         ? AppendAsyncSuffixAsync(context.Document, syntaxToken, c)
                         : RemoveAsyncSuffixAsync(context.Document, syntaxToken, c),
                     equivalenceKey: Title),
