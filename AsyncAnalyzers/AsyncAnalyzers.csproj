@@ -37,7 +37,7 @@
     <Compile Include="..\GlobalSuppressions.cs">
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
-    <Compile Include="AsyncCodeFixProvider.cs" />
+    <Compile Include="AsyncSuffixCodeFixProvider.cs" />
     <Compile Include="AsyncMethodNameAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
