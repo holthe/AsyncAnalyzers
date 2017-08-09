@@ -1,5 +1,4 @@
 require 'fileutils'
-gem 'albacore', '>=2.6.1'
 require 'albacore'
 require 'albacore/task_types/test_runner'
 require 'semver'
