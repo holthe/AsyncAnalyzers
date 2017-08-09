@@ -88,8 +88,12 @@ task :update_version do
 end
 
 desc 'Pack and push NuGet package'
-task :nuget_pack_and_push, [:nuget_api_key, :nuget_source] => [:update_version] do |t, args|
-    branch = %x[git rev-parse --abbrev-ref HEAD].gsub("\n",'')
+task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] => [:update_version] do |t, args|
+    branch = args[:branch]
+    if (branch.nil?)
+        branch = %x[git rev-parse --abbrev-ref HEAD].gsub("\n",'')
+    end
+    
     if (branch != @git_master)
         puts "Cannot execute nuget_pack_and_push task on #{branch} != #{@git_master}..."
         next
