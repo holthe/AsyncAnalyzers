@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>AsyncAnalyzers</id>
-    <version>1.0.0.1</version>
+    <version>1.0.1.0</version>
     <title>AsyncAnalyzers</title>
     <authors>Peter Holthe Hansen</authors>
     <owners>Peter Holthe Hansen</owners>
@@ -12,8 +12,8 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>AsyncAnalyzers</description>
     <releaseNotes>Add diagnostic and fix for missing/superfluous Async suffixes on TAP methods.</releaseNotes>
-    <copyright>Copyright</copyright>
-    <tags>AsyncAnalyzers, analyzers</tags>
+    <copyright>Peter Holthe Hansen</copyright>
+    <tags>AsyncAnalyzers, analyzers, Roslyn, async, suffix</tags>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" targetFramework="" />
     </frameworkAssemblies>

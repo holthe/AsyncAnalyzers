@@ -2,8 +2,10 @@ language: csharp
 solution: AsyncAnalyzers.sln
 before_install:
   - gem install albacore -v 2.6.1
+  - gem install semver
 install:
   - nuget restore AsyncAnalyzers.sln
 script:
   - xbuild /p:Configuration=Release AsyncAnalyzers.sln
   - mono ./packages/xunit.runner.console.2.2.0/tools/xunit.console.exe ./AsyncAnalyzers.Test/bin/Release/AsyncAnalyzers.Test.dll
+  - rake nuget_pack_and_push
