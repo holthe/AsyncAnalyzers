@@ -3,7 +3,7 @@
 
 [![Build Status](https://travis-ci.org/holthe/AsyncAnalyzers.svg?branch=master)](https://travis-ci.org/holthe/AsyncAnalyzers)
 [![Latest version](https://img.shields.io/nuget/v/AsyncAnalyzers.svg)](https://www.nuget.org/packages/AsyncAnalyzers)
-[![License](http://img.shields.io/:license-MIT-red.svg)](opensource.org/licenses/mit-license.php)
+[![License](http://img.shields.io/:license-MIT-red.svg)](LICENSE.md)
 
 ## Build Status
 
@@ -39,4 +39,4 @@ which assumes that the solution has previously been built for **Release** config
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License - see [![License](http://img.shields.io/:license-MIT-red.svg)](LICENSE.md) for details.
