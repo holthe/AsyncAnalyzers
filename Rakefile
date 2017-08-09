@@ -87,13 +87,23 @@ task :update_version do
 end
 
 desc 'Pack and push NuGet package'
-task :nuget_pack_and_push => [:update_version] do
+task :nuget_pack_and_push, [:nuget_api_key, :nuget_source] => [:update_version] do |t, args|
     pack_command = "nuget pack #{@nuspec_file} -Verbosity detailed"
     sh "#{pack_command}", verbose: false do |ok, status|
         unless ok
             raise Exception.new("[!] Failed to pack NuGet package with status #{status.exitstatus}")
         end
     end
+    
+    nuget_api_key = args[:nuget_api_key]
+	if (not nuget_api_key.nil?)
+		@nuget_api_key = nuget_api_key
+	end
+    
+    nuget_source = args[:nuget_source]
+	if (not nuget_source.nil?)
+		@nuget_source = nuget_source
+	end
     
     push_command = "nuget push ./AsyncAnalyzers.#{@nuspec_version}.nupkg -Verbosity detailed -ApiKey #{@nuget_api_key} -Source #{@nuget_source}"
     sh "#{push_command}", verbose: false do |ok, status|
