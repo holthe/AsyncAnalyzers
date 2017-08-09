@@ -38,7 +38,7 @@ end
 @xunit_test_assemblies = "**/*AsyncAnalyzers.Test/bin/#{@build_configuration}/*AsyncAnalyzers.Test.dll"
 
 # These values will come from either the file rake_env or environment variables
-@nuget_api_key = fetch(:NuGetApiKeu)
+@nuget_api_key = fetch(:NuGetApiKey)
 @nuget_source = fetch(:NuGetSource)
 
 @nuspec_file = './AsyncAnalyzers/AsyncAnalyzers.nuspec'
