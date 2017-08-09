@@ -2,7 +2,6 @@ language: csharp
 solution: AsyncAnalyzers.sln
 before_install:
   - gem install albacore -v 2.6.1
-  - gem install semver
 install:
   - nuget restore AsyncAnalyzers.sln
 script:
