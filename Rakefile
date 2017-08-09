@@ -43,6 +43,7 @@ end
 
 @nuspec_file = './AsyncAnalyzers/AsyncAnalyzers.nuspec'
 @nuspec_version = ''
+@git_master = 'master'
 
 task :default => [:restore, :build_solution, :xunit_tests]
 
@@ -88,6 +89,12 @@ end
 
 desc 'Pack and push NuGet package'
 task :nuget_pack_and_push, [:nuget_api_key, :nuget_source] => [:update_version] do |t, args|
+    branch = %x[git rev-parse --abbrev-ref HEAD].gsub("\n",'')
+    if (branch != @git_master)
+        puts "Cannot execute nuget_pack_and_push task on #{branch} != #{@git_master}..."
+        next
+    end
+    
     success = true
     pack_command = "nuget pack #{@nuspec_file} -Verbosity detailed"
     sh "#{pack_command}", verbose: false do |ok, status|
