@@ -41,7 +41,7 @@ end
 @nuget_api_key = fetch(:NuGetApiKey)
 @nuget_source = fetch(:NuGetSource)
 
-@nuspec_file = './AsyncAnalyzers/AsyncAnalyzers.nuspec'
+@nuspec_file = 'AsyncAnalyzers.nuspec'
 @nuspec_version = ''
 @git_master = 'master'
 
@@ -78,13 +78,14 @@ test_runner :xunit_tests do |tests|
 end
 
 task :update_version do
-    text = File.read(@nuspec_file)
+    nuspec_file_path = "AsyncAnalyzers/#{@nuspec_file}"
+    text = File.read(nuspec_file_path)
     
     ver = SemVer.find
     @nuspec_version = "#{SemVer.new(ver.major, ver.minor, ver.patch).format "%M.%m.%p"}.0"
     new_contents = text.gsub(/(?<=\<version\>).+(?=\<\/version\>)/, @nuspec_version)
     
-    File.open(@nuspec_file, "w") {|file| file.puts new_contents }
+    File.open(nuspec_file_path, "w") {|file| file.puts new_contents }
 end
 
 desc 'Pack and push NuGet package'
@@ -99,34 +100,36 @@ task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] => [:update_
         next
     end
     
-    success = true
-    pack_command = "nuget pack #{@nuspec_file} -Verbosity detailed"
-    sh "#{pack_command}", verbose: false do |ok, status|
-        unless ok
-            puts "[!] Failed to pack NuGet package with status #{status.exitstatus}"
-            success = false
+    Dir.chdir("AsyncAnalyzers/bin/#{@build_configuration}") do    
+        success = true
+        pack_command = "nuget pack #{@nuspec_file} -Verbosity detailed"
+        sh "#{pack_command}", verbose: false do |ok, status|
+            unless ok
+                puts "[!] Failed to pack NuGet package with status #{status.exitstatus}"
+                success = false
+            end
         end
-    end
-    
-    # Break out early if pack failed
-    if (not success)
-        next
-    end
-    
-    nuget_api_key = args[:nuget_api_key]
-    if (not nuget_api_key.nil?)
-        @nuget_api_key = nuget_api_key
-    end
-    
-    nuget_source = args[:nuget_source]
-    if (not nuget_source.nil?)
-        @nuget_source = nuget_source
-    end
-    
-    push_command = "nuget push ./AsyncAnalyzers.#{@nuspec_version}.nupkg -Verbosity detailed -ApiKey #{@nuget_api_key} -Source #{@nuget_source}"
-    sh "#{push_command}", verbose: false do |ok, status|
-        unless ok
-            puts "[!] Failed to push NuGet package with status #{status.exitstatus}"
+        
+        # Break out early if pack failed
+        if (not success)
+            next
+        end
+        
+        nuget_api_key = args[:nuget_api_key]
+        if (not nuget_api_key.nil?)
+            @nuget_api_key = nuget_api_key
+        end
+        
+        nuget_source = args[:nuget_source]
+        if (not nuget_source.nil?)
+            @nuget_source = nuget_source
+        end
+        
+        push_command = "nuget push ./AsyncAnalyzers.#{@nuspec_version}.nupkg -Verbosity detailed -ApiKey #{@nuget_api_key} -Source #{@nuget_source}"
+        sh "#{push_command}", verbose: false do |ok, status|
+            unless ok
+                puts "[!] Failed to push NuGet package with status #{status.exitstatus}"
+            end
         end
     end
 end

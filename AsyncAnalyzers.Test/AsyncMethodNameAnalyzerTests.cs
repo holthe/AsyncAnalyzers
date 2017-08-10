@@ -103,6 +103,28 @@ namespace AsyncAnalyzers.Test
         }
 
         [Fact]
+        public void MethodReturningNestedGenericTaskWithoutAsyncModifier_AsyncSuffix_NoDiagnosticFound()
+        {
+            const string test = @"
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Diagnostics;
+
+    namespace ConsoleApplication1
+    {
+        class TypeName
+        {
+            public Task<T<T1>> XAsync() { }
+        }
+    }";
+
+            VerifyCSharpDiagnostic(test);
+        }
+
+        [Fact]
         public void MethodReturningVoidWithAsyncModifier_NoAsyncSuffix_DiagnosticFound_CanFix()
         {
             const string test = @"

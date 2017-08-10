@@ -8,8 +8,8 @@ namespace AsyncAnalyzers
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AsyncMethodNameAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticIdForMissingAsyncSuffix = "Missing Async";
-        public const string DiagnosticIdForSuperFluousAsyncSuffix = "Superfluous Async";
+        public const string DiagnosticIdForMissingAsyncSuffix = "_MissingAsync";
+        public const string DiagnosticIdForSuperFluousAsyncSuffix = "_SuperfluousAsync";
 
         private const string Category = "Naming";
         private const string TitleForMissingAsync = "TAP methods must end with Async";
@@ -39,7 +39,7 @@ namespace AsyncAnalyzers
             }
 
             var asyncResultInterface = context.Compilation.GetTypeByMetadataName(typeof(IAsyncResult).FullName);
-            var returnsAsyncResultImplementation = methodSymbol.ReturnType.Interfaces.Contains(asyncResultInterface);
+            var returnsAsyncResultImplementation = methodSymbol.ReturnType.AllInterfaces.Contains(asyncResultInterface);
 
             // Methods marked async or returning IAsyncResult must have Async suffix
             if ((methodSymbol.IsAsync || returnsAsyncResultImplementation) && !methodSymbol.Name.EndsWith("Async"))
