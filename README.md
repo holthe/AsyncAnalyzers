@@ -1,4 +1,4 @@
-# AsyncAnalyzers [![Build Status](https://travis-ci.org/holthe/AsyncAnalyzers.svg?branch=master)](https://travis-ci.org/holthe/AsyncAnalyzers) [![Latest version](https://img.shields.io/nuget/v/AsyncAnalyzers.svg)](https://www.nuget.org/packages/AsyncAnalyzers) [![License](http://img.shields.io/:license-MIT-red.svg)](LICENSE.md)
+# AsyncAnalyzers [![Build Status](https://travis-ci.org/holthe/AsyncAnalyzers.svg?branch=master)](https://travis-ci.org/holthe/AsyncAnalyzers) [![Latest version](https://img.shields.io/nuget/v/AsyncAnalyzers.svg)](https://www.nuget.org/packages/AsyncAnalyzers) [![NuGet](https://img.shields.io/nuget/dt/AsyncAnalyzers.svg)](https://www.nuget.org/packages/AsyncAnalyzers) [![License](http://img.shields.io/:license-MIT-red.svg)](LICENSE.md)
 > This repository contains a TAP method naming diagnostic extension for the .NET Compiler Platform ("Roslyn").
 
 ## Build Status
