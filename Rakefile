@@ -77,19 +77,8 @@ test_runner :xunit_tests do |tests|
     tests.files = FileList[@xunit_test_assemblies]
 end
 
-task :update_version do
-    nuspec_file_path = "AsyncAnalyzers/#{@nuspec_file}"
-    text = File.read(nuspec_file_path)
-    
-    ver = SemVer.find
-    @nuspec_version = "#{SemVer.new(ver.major, ver.minor, ver.patch).format "%M.%m.%p"}.0"
-    new_contents = text.gsub(/(?<=\<version\>).+(?=\<\/version\>)/, @nuspec_version)
-    
-    File.open(nuspec_file_path, "w") {|file| file.puts new_contents }
-end
-
 desc 'Pack and push NuGet package'
-task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] => [:update_version] do |t, args|
+task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] do |t, args|
     branch = args[:branch]
     if (branch.nil?)
         branch = %x[git rev-parse --abbrev-ref HEAD].gsub("\n",'')
@@ -100,7 +89,15 @@ task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] => [:update_
         next
     end
     
-    Dir.chdir("AsyncAnalyzers/bin/#{@build_configuration}") do    
+    Dir.chdir("AsyncAnalyzers/bin/#{@build_configuration}") do
+        text = File.read(@nuspec_file)
+        
+        ver = SemVer.find
+        @nuspec_version = "#{SemVer.new(ver.major, ver.minor, ver.patch).format "%M.%m.%p"}.0"
+        new_contents = text.gsub(/(?<=\<version\>).+(?=\<\/version\>)/, @nuspec_version)
+        
+        File.open(@nuspec_file, "w") {|file| file.puts new_contents }
+    
         success = true
         pack_command = "nuget pack #{@nuspec_file} -Verbosity detailed"
         sh "#{pack_command}", verbose: false do |ok, status|
