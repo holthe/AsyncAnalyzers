@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
   <metadata>
     <id>AsyncAnalyzers</id>
-    <version>1.0.5.0</version>
+    <version>1.1.1.0</version>
     <title>AsyncAnalyzers</title>
     <authors>Peter Holthe Hansen</authors>
     <owners>Peter Holthe Hansen</owners>
@@ -10,10 +10,10 @@
     <projectUrl>https://github.com/holthe/AsyncAnalyzers</projectUrl>
     <iconUrl>https://github.com/holthe/AsyncAnalyzers/blob/master/AsyncAnalyzers/Assets/AsyncAnalyzerNuGet.png?raw=true</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>AsyncAnalyzers</description>
+    <description>A set of Roslyn analyzers for diagnostic/fix of missing/superfluous Async suffixes on TAP methods.</description>
     <releaseNotes>Add diagnostic and fix for missing/superfluous Async suffixes on TAP methods.</releaseNotes>
-    <copyright>Peter Holthe Hansen</copyright>
-    <tags>AsyncAnalyzers, analyzers, Roslyn, async, suffix</tags>
+    <copyright>Copyright 2017 Peter Holthe Hansen</copyright>
+    <tags>AsyncAnalyzers, CodeFix, Refactor, Roslyn, TAP, async, Task, CSharp, C#</tags>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" targetFramework="" />
     </frameworkAssemblies>
