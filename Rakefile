@@ -89,15 +89,18 @@ task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] do |t, args|
         next
     end
     
+    ver = SemVer.find
     Dir.chdir("AsyncAnalyzers/bin/#{@build_configuration}") do
         text = File.read(@nuspec_file)
         
-        ver = SemVer.find
         @nuspec_version = "#{SemVer.new(ver.major, ver.minor, ver.patch).format "%M.%m.%p"}.0"
         new_contents = text.gsub(/(?<=\<version\>).+(?=\<\/version\>)/, @nuspec_version)
         
         File.open(@nuspec_file, "w") {|file| file.puts new_contents }
-    
+        
+        # Copy install scripts
+        sh "cp -R ../../tools/ tools/"
+        
         success = true
         pack_command = "nuget pack #{@nuspec_file} -Verbosity detailed"
         sh "#{pack_command}", verbose: false do |ok, status|
