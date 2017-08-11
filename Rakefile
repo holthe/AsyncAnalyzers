@@ -98,8 +98,8 @@ task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] do |t, args|
         
         File.open(@nuspec_file, "w") {|file| file.puts new_contents }
         
-        # Copy install scripts
         sh "cp -R ../../tools/ tools/"
+        # Copy install scripts
         
         success = true
         pack_command = "nuget pack #{@nuspec_file} -Verbosity detailed"
