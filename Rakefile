@@ -98,8 +98,8 @@ task :nuget_pack do
     end
 end
 
-desc 'Push NuGet package'
-task :nuget_push, [:nuget_api_key, :nuget_source, :branch] => [:nuget_pack] do |t, args|
+desc 'Pack and push NuGet package'
+task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] => [:nuget_pack] do |t, args|
     Dir.chdir("AsyncAnalyzers/bin/#{@build_configuration}") do
         branch = args[:branch]
         if (branch.nil?)
@@ -109,8 +109,8 @@ task :nuget_push, [:nuget_api_key, :nuget_source, :branch] => [:nuget_pack] do |
         if (branch != @git_master and not branch.downcase().include? @git_travis_branch_pattern)
             puts "Can only execute nuget_push task on #{@git_master} or a Travis test branch... Was on #{branch}"
             next
-        end
         
+        end
         nuget_api_key = args[:nuget_api_key]
         if (not nuget_api_key.nil?)
             @nuget_api_key = nuget_api_key
