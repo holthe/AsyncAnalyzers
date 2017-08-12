@@ -42,8 +42,9 @@ end
 @nuget_source = fetch(:NuGetSource)
 
 @nuspec_file = 'AsyncAnalyzers.nuspec'
-@nuspec_version = ''
+@nuspec_version = 'unknown'
 @git_master = 'master'
+@git_travis_branch_pattern = 'travis'
 
 task :default => [:restore, :build_solution, :xunit_tests]
 
@@ -77,18 +78,8 @@ test_runner :xunit_tests do |tests|
     tests.files = FileList[@xunit_test_assemblies]
 end
 
-desc 'Pack and push NuGet package'
-task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] do |t, args|
-    branch = args[:branch]
-    if (branch.nil?)
-        branch = %x[git rev-parse --abbrev-ref HEAD].gsub("\n",'')
-    end
-    
-    if (branch != @git_master)
-        puts "Cannot execute nuget_pack_and_push task on #{branch} != #{@git_master}..."
-        next
-    end
-    
+desc 'Pack NuGet package'
+task :nuget_pack do
     ver = SemVer.find
     Dir.chdir("AsyncAnalyzers/bin/#{@build_configuration}") do
         text = File.read(@nuspec_file)
@@ -98,23 +89,28 @@ task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] do |t, args|
         
         File.open(@nuspec_file, "w") {|file| file.puts new_contents }
         
-        sh "cp -R ../../tools/ tools/"
-        # Copy install scripts
-        
-        success = true
         pack_command = "nuget pack #{@nuspec_file} -Verbosity detailed"
         sh "#{pack_command}", verbose: false do |ok, status|
             unless ok
                 puts "[!] Failed to pack NuGet package with status #{status.exitstatus}"
-                success = false
             end
         end
-        
-        # Break out early if pack failed
-        if (not success)
-            next
+    end
+end
+
+desc 'Pack and push NuGet package'
+task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] => [:nuget_pack] do |t, args|
+    Dir.chdir("AsyncAnalyzers/bin/#{@build_configuration}") do
+        branch = args[:branch]
+        if (branch.nil?)
+            branch = %x[git rev-parse --abbrev-ref HEAD].gsub("\n",'')
         end
         
+        if (branch != @git_master and not branch.downcase().include? @git_travis_branch_pattern)
+            puts "Can only execute nuget_push task on #{@git_master} or a Travis test branch... Was on #{branch}"
+            next
+        
+        end
         nuget_api_key = args[:nuget_api_key]
         if (not nuget_api_key.nil?)
             @nuget_api_key = nuget_api_key
