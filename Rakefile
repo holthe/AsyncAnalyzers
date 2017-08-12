@@ -97,10 +97,7 @@ task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] do |t, args|
         new_contents = text.gsub(/(?<=\<version\>).+(?=\<\/version\>)/, @nuspec_version)
         
         File.open(@nuspec_file, "w") {|file| file.puts new_contents }
-        
-        sh "cp -R ../../tools/ tools/"
-        # Copy install scripts
-        
+                
         success = true
         pack_command = "nuget pack #{@nuspec_file} -Verbosity detailed"
         sh "#{pack_command}", verbose: false do |ok, status|
@@ -109,7 +106,7 @@ task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] do |t, args|
                 success = false
             end
         end
-        
+        next
         # Break out early if pack failed
         if (not success)
             next
