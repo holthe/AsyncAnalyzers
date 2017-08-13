@@ -9,19 +9,19 @@ namespace AsyncAnalyzers
     public class AsyncMethodNameAnalyzer : DiagnosticAnalyzer
     {
         public const string DiagnosticIdForMissingAsyncSuffix = "_MissingAsync";
-        public const string DiagnosticIdForSuperFluousAsyncSuffix = "_SuperfluousAsync";
+        public const string DiagnosticIdForSuperfluousAsyncSuffix = "_SuperfluousAsync";
+        public const string MessageFormatForSuperfluousAsync = "'{0}' is not a TAP method but ends with Async";
+        public const string MessageFormatForMissingAsync = "'{0}' does not end with Async";
 
         private const string Category = "Naming";
         private const string TitleForMissingAsync = "TAP methods must end with Async";
-        private const string MessageFormatForMissingAsync = "'{0}' does not end with Async";
         private const string DescriptionForMissingAsync = "TAP methods should have the Async suffix.";
 
         private const string TitleForSuperfluousAsync = "Only TAP methods must end with Async";
-        private const string MessageFormatForSuperfluousAsync = "'{0}' is not a TAP method but ends with Async";
         private const string DescriptionForSuperfluousAsync = "Only TAP methods should have the Async suffix.";
 
         private static readonly DiagnosticDescriptor RuleForMissingAsyncSuffix = new DiagnosticDescriptor(DiagnosticIdForMissingAsyncSuffix, TitleForMissingAsync, MessageFormatForMissingAsync, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: DescriptionForMissingAsync);
-        private static readonly DiagnosticDescriptor RuleForSuperfluousAsyncSuffix = new DiagnosticDescriptor(DiagnosticIdForSuperFluousAsyncSuffix, TitleForSuperfluousAsync, MessageFormatForSuperfluousAsync, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: DescriptionForSuperfluousAsync);
+        private static readonly DiagnosticDescriptor RuleForSuperfluousAsyncSuffix = new DiagnosticDescriptor(DiagnosticIdForSuperfluousAsyncSuffix, TitleForSuperfluousAsync, MessageFormatForSuperfluousAsync, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: DescriptionForSuperfluousAsync);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(RuleForMissingAsyncSuffix, RuleForSuperfluousAsyncSuffix);
 

@@ -1,4 +1,5 @@
-﻿using AsyncAnalyzers.Test.Helpers;
+﻿using System.IO;
+using AsyncAnalyzers.Test.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -8,6 +9,11 @@ namespace AsyncAnalyzers.Test
 {
     public class AsyncMethodNameAnalyzerTests : Verifiers.CodeFixVerifier
     {
+        private const string DiagnosticLocationPath = "Test0.cs";
+
+        private static readonly string TestDataInputDir = Path.Combine("TestData", "Input");
+        private static readonly string TestDataOutputDir = Path.Combine("TestData", "Output");
+
         private DiagnosticResult _expectedDiagnosticResultForMissingAsync;
         private DiagnosticResult _expectedDiagnosticResultForSuperfluousAsync;
 
@@ -16,353 +22,83 @@ namespace AsyncAnalyzers.Test
             _expectedDiagnosticResultForMissingAsync = new DiagnosticResult
             {
                 Id = AsyncMethodNameAnalyzer.DiagnosticIdForMissingAsyncSuffix,
-                Message = "\'X\' does not end with Async",
+                Message = string.Format(AsyncMethodNameAnalyzer.MessageFormatForMissingAsync, "X"),
                 Severity = DiagnosticSeverity.Error
             };
 
             _expectedDiagnosticResultForSuperfluousAsync = new DiagnosticResult
             {
-                Id = AsyncMethodNameAnalyzer.DiagnosticIdForSuperFluousAsyncSuffix,
-                Message = "\'XAsync\' is not a TAP method but ends with Async",
+                Id = AsyncMethodNameAnalyzer.DiagnosticIdForSuperfluousAsyncSuffix,
+                Message = string.Format(AsyncMethodNameAnalyzer.MessageFormatForSuperfluousAsync, "XAsync"),
                 Severity = DiagnosticSeverity.Error
             };
         }
 
         [Fact]
-        public void NoDiagnosticFound()
-        {
-            const string test = @"";
-
-            VerifyCSharpDiagnostic(test);
-        }
-
-        [Fact]
         public void MethodNotReturningIAsyncResult_AsyncSuffix_DiagnosticFound_CanFix()
         {
-            const string test = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public int XAsync() { }
-        }
-    }";
+            const string testFile = "NoIAsyncResult.AsyncSuffix.cs";
+            var test = File.ReadAllText(Path.Combine(TestDataInputDir, testFile));
             _expectedDiagnosticResultForSuperfluousAsync.Locations =
                 new[]
                 {
-                    new DiagnosticResultLocation("Test0.cs", 13, 24)
+                    new DiagnosticResultLocation(DiagnosticLocationPath, 5, 20)
                 };
 
             VerifyCSharpDiagnostic(test, _expectedDiagnosticResultForSuperfluousAsync);
 
-            const string fixtest = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public int X() { }
-        }
-    }";
+            var fixtest = File.ReadAllText(Path.Combine(TestDataOutputDir, testFile));
             VerifyCSharpFix(test, fixtest);
         }
 
-        [Fact]
-        public void MethodReturningVoidWithAsyncModifier_AsyncSuffix_NoDiagnosticFound()
+        [Theory]
+        [InlineData("AsyncTask.NoAsyncSuffix.cs", 8, 27)]
+        [InlineData("AsyncVoid.NoAsyncSuffix.cs", 5, 27)]
+        [InlineData("GenericTask.NoAsyncSuffix.cs", 8, 26)]
+        [InlineData("Task.NoAsyncSuffix.cs", 8, 21)]
+        public void VerifyMissingAsyncDiagnosticAndFix(string testFile, int diagnosticLine, int diagnosticColumn)
         {
-            const string test = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public async void XAsync() { }
-        }
-    }";
-
-            VerifyCSharpDiagnostic(test);
-        }
-
-        [Fact]
-        public void MethodReturningNestedGenericTaskWithoutAsyncModifier_AsyncSuffix_NoDiagnosticFound()
-        {
-            const string test = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public Task<T<T1>> XAsync() { }
-        }
-    }";
-
-            VerifyCSharpDiagnostic(test);
-        }
-
-        [Fact]
-        public void MethodReturningVoidWithAsyncModifier_NoAsyncSuffix_DiagnosticFound_CanFix()
-        {
-            const string test = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public async void X() { }
-        }
-    }";
+            var test = File.ReadAllText(Path.Combine(TestDataInputDir, testFile));
 
             _expectedDiagnosticResultForMissingAsync.Locations =
                 new[]
                 {
-                    new DiagnosticResultLocation("Test0.cs", 13, 31)
+                    new DiagnosticResultLocation(DiagnosticLocationPath, diagnosticLine, diagnosticColumn)
                 };
 
             VerifyCSharpDiagnostic(test, _expectedDiagnosticResultForMissingAsync);
 
-            const string fixtest = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public async void XAsync() { }
-        }
-    }";
+            var fixtest = File.ReadAllText(Path.Combine(TestDataOutputDir, testFile));
             VerifyCSharpFix(test, fixtest);
         }
 
-        [Fact]
-        public void MethodReturningGenericTaskWithAsyncModifier_NoAsyncSuffix_DiagnosticFound_CanFix()
+        [Theory]
+        [InlineData("NoIAsyncResult.AsyncSuffix.cs", 5, 20)]
+        public void VerifySuperfluousAsyncDiagnosticAndFix(string testFile, int diagnosticLine, int diagnosticColumn)
         {
-            const string test = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
+            var test = File.ReadAllText(Path.Combine(TestDataInputDir, testFile));
 
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public async Task<T> X() { }
-        }
-    }";
-            _expectedDiagnosticResultForMissingAsync.Locations =
+            _expectedDiagnosticResultForSuperfluousAsync.Locations =
                 new[]
                 {
-                    new DiagnosticResultLocation("Test0.cs", 13, 34)
+                    new DiagnosticResultLocation(DiagnosticLocationPath, diagnosticLine, diagnosticColumn)
                 };
 
-            VerifyCSharpDiagnostic(test, _expectedDiagnosticResultForMissingAsync);
+            VerifyCSharpDiagnostic(test, _expectedDiagnosticResultForSuperfluousAsync);
 
-            const string fixtest = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public async Task<T> XAsync() { }
-        }
-    }";
+            var fixtest = File.ReadAllText(Path.Combine(TestDataOutputDir, testFile));
             VerifyCSharpFix(test, fixtest);
         }
 
-        [Fact]
-        public void MethodReturningTaskWithAsyncModifier_NoAsyncSuffix_DiagnosticFound_CanFix()
+        [Theory]
+        [InlineData("AsyncTask.AsyncSuffix.cs")]
+        [InlineData("AsyncVoid.AsyncSuffix.cs")]
+        [InlineData("DelegateVoid.NoAsyncSuffix.cs")]
+        [InlineData("GenericramaTask.AsyncSuffix.cs")]
+        [InlineData("Task.AsyncSuffix.cs")]
+        public void VerifyNoDiagnostic(string testFile)
         {
-            const string test = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public async Task X() { }
-        }
-    }";
-            _expectedDiagnosticResultForMissingAsync.Locations =
-                new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 13, 31)
-                };
-
-            VerifyCSharpDiagnostic(test, _expectedDiagnosticResultForMissingAsync);
-
-            const string fixtest = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public async Task XAsync() { }
-        }
-    }";
-            VerifyCSharpFix(test, fixtest);
-        }
-
-        [Fact]
-        public void MethodReturningTaskWithAsyncModifier_AsyncSuffix_NoDiagnosticFound_CanFix()
-        {
-            const string test = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public async Task XAsync() { }
-        }
-    }";
-
-            VerifyCSharpDiagnostic(test);
-        }
-
-        [Fact]
-        public void MethodReturningTaskWithoutAsyncModifier_NoAsyncSuffix_DiagnosticFound_CanFix()
-        {
-            const string test = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public Task X() { }
-        }
-    }";
-            _expectedDiagnosticResultForMissingAsync.Locations =
-                new[]
-                {
-                    new DiagnosticResultLocation("Test0.cs", 13, 25)
-                };
-
-            VerifyCSharpDiagnostic(test, _expectedDiagnosticResultForMissingAsync);
-
-            const string fixtest = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public Task XAsync() { }
-        }
-    }";
-            VerifyCSharpFix(test, fixtest);
-        }
-
-        [Fact]
-        public void MethodReturningTaskWithoutAsyncModifier_AsyncSuffix_NoDiagnosticFound()
-        {
-            const string test = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public Task XAsync() { }
-        }
-    }";
-
-            VerifyCSharpDiagnostic(test);
-        }
-
-        [Fact]
-        public void DelegateMethodReturningVoid_NoAsyncSuffix_NoDiagnostic()
-        {
-            const string test = @"
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Diagnostics;
-
-    namespace ConsoleApplication1
-    {
-        class TypeName
-        {
-            public delegate void MyDelegate(object sender, EventArgs args);
-        }
-    }";
+            var test = File.ReadAllText(Path.Combine(TestDataInputDir, testFile));
 
             VerifyCSharpDiagnostic(test);
         }

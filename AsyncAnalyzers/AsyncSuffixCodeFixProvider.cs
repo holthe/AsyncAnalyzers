@@ -16,7 +16,7 @@ namespace AsyncAnalyzers
     {
         private const string Title = "Append missing or remove superfluous Async suffix.";
 
-        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AsyncMethodNameAnalyzer.DiagnosticIdForMissingAsyncSuffix, AsyncMethodNameAnalyzer.DiagnosticIdForSuperFluousAsyncSuffix);
+        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AsyncMethodNameAnalyzer.DiagnosticIdForMissingAsyncSuffix, AsyncMethodNameAnalyzer.DiagnosticIdForSuperfluousAsyncSuffix);
 
         public sealed override FixAllProvider GetFixAllProvider()
         {
