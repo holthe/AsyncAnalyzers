@@ -19,6 +19,11 @@ To install **AsyncAnalyzers**, run the following command in the [Package Manager
 Install-Package AsyncAnalyzers
 ```
 
+or the following command for [.NET CLI](https://docs.microsoft.com/en-us/dotnet/core/tools/)
+```
+dotnet add package AsyncAnalyzers
+```
+
 ### Install from source
 
 1. Clone the repository and build the solution (optionally with `rake`).
