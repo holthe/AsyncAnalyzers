@@ -18,7 +18,6 @@ deploy:
     secure: htKdiMio+ldIGhB3ypfE+K//t8U8Aac67zoeKXImY2mZ9NbwJAzJdUDO52Ib4UjpdfwgE88CTS1x5GCFtF3KIzrFYhJDLKNFWm1KqDf9+8pg8+8ld8iED/puQuZg635aQDqMBMxrwFiZkEZ2VUOyBF1rCGDaJr5ITt77IE4we3l8GEO3NHc96JLG+KoNac5q73MVGTWC/OQ7mSw3GfxCp452hpy0+8mVmvjXVkq7r1/ThmOvptWzVSbJu9h8S0D9kWbOhlYTThdYOP3XgOpwZRXrEEdM9maOv8lGRzvHt/ceqn8WVV7MJDRkNswctSCbyfGB00xz/nXlPGC8n8dyERF55vMQVk8NFvzjMMr87JnX4VOlQEOLhrjklZtpg/DF8sY7Sk4wLlk/opkAeyvvUWzPib3VTHefoP//1E0lNdg7PnEKWSLFU4ADInUpmSuLKPgQDOA7d6iokAYnAwE4b6FeWLUTgOI98Lf8ORBI1UA9/aYxbA20UFQwdU30oasVhNEBxs+g/w6bv/9wtYIiz6uVjl8cjd1cLo93mqg5eKV3MGnG8V0ffeC2mqeH0V6lMUktfLlAOJ2XedK4iRiEcCKQxRH6Ykq03AOPjk9fzDNBJspxNfYuWkk5zcVe7ao4iyAd1KI8lAAHUCrqXkUPTTDDvybXhhOoRNgk16TJnGE=
   file_glob: true
   file: "${RELEASE_NUGET}"
-  file: AsyncAnalyzers.1.1.2.0.nupkg
   on:
     repo: holthe/AsyncAnalyzers
     all_branches: true
