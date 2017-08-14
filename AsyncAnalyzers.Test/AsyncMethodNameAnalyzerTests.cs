@@ -9,7 +9,8 @@ namespace AsyncAnalyzers.Test
 {
     public class AsyncMethodNameAnalyzerTests : Verifiers.CodeFixVerifier
     {
-        private const string DiagnosticLocationPath = "Test0.cs";
+        private const int SingleFileCount = 0;
+        private static readonly string DiagnosticLocationPath = $"{DefaultFilePathPrefix}{SingleFileCount}.{CSharpDefaultFileExt}";
 
         private static readonly string TestDataInputDir = Path.Combine("TestData", "Input");
         private static readonly string TestDataOutputDir = Path.Combine("TestData", "Output");

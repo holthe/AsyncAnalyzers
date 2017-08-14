@@ -17,15 +17,14 @@ namespace AsyncAnalyzers.Test.Verifiers
     /// </summary>
     public abstract class DiagnosticVerifier
     {
-        private const string DefaultFilePathPrefix = "Test";
-        private const string CSharpDefaultFileExt = "cs";
-        private const string VisualBasicDefaultExt = "vb";
+        protected const string DefaultFilePathPrefix = "Test";
+        protected const string CSharpDefaultFileExt = "cs";
         private const string TestProjectName = "TestProject";
 
-        private static readonly MetadataReference _corlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
-        private static readonly MetadataReference _systemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
-        private static readonly MetadataReference _cSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
-        private static readonly MetadataReference _codeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
+        private static readonly MetadataReference CorlibReference = MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
+        private static readonly MetadataReference SystemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
+        private static readonly MetadataReference CSharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
+        private static readonly MetadataReference CodeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
 
         /// <summary>
         /// Given an analyzer and a document to apply it to, run the analyzer and gather an array of diagnostics found in it.
@@ -85,14 +84,6 @@ namespace AsyncAnalyzers.Test.Verifiers
         }
 
         /// <summary>
-        /// Get the Visual Basic analyzer being tested (C#) - to be implemented in non-abstract class
-        /// </summary>
-        protected virtual DiagnosticAnalyzer GetBasicDiagnosticAnalyzer()
-        {
-            return null;
-        }
-
-        /// <summary>
         /// Called to test a C# DiagnosticAnalyzer when applied on the single inputted string as a source
         /// Note: input a DiagnosticResult for each Diagnostic expected
         /// </summary>
@@ -104,17 +95,6 @@ namespace AsyncAnalyzers.Test.Verifiers
         }
 
         /// <summary>
-        /// Called to test a VB DiagnosticAnalyzer when applied on the single inputted string as a source
-        /// Note: input a DiagnosticResult for each Diagnostic expected
-        /// </summary>
-        /// <param name="source">A class in the form of a string to run the analyzer on</param>
-        /// <param name="expected">DiagnosticResults that should appear after the analyzer is run on the source</param>
-        protected void VerifyBasicDiagnostic(string source, params DiagnosticResult[] expected)
-        {
-            VerifyDiagnostics(new[] { source }, LanguageNames.VisualBasic, GetBasicDiagnosticAnalyzer(), expected);
-        }
-
-        /// <summary>
         /// Called to test a C# DiagnosticAnalyzer when applied on the inputted strings as a source
         /// Note: input a DiagnosticResult for each Diagnostic expected
         /// </summary>
@@ -123,17 +103,6 @@ namespace AsyncAnalyzers.Test.Verifiers
         protected void VerifyCSharpDiagnostic(string[] sources, params DiagnosticResult[] expected)
         {
             VerifyDiagnostics(sources, LanguageNames.CSharp, GetCSharpDiagnosticAnalyzer(), expected);
-        }
-
-        /// <summary>
-        /// Called to test a VB DiagnosticAnalyzer when applied on the inputted strings as a source
-        /// Note: input a DiagnosticResult for each Diagnostic expected
-        /// </summary>
-        /// <param name="sources">An array of strings to create source documents from to run the analyzers on</param>
-        /// <param name="expected">DiagnosticResults that should appear after the analyzer is run on the sources</param>
-        protected void VerifyBasicDiagnostic(string[] sources, params DiagnosticResult[] expected)
-        {
-            VerifyDiagnostics(sources, LanguageNames.VisualBasic, GetBasicDiagnosticAnalyzer(), expected);
         }
 
         /// <summary>
@@ -166,7 +135,7 @@ namespace AsyncAnalyzers.Test.Verifiers
         /// <returns>A Tuple containing the Documents produced from the sources and their TextSpans if relevant</returns>
         private static Document[] GetDocuments(string[] sources, string language)
         {
-            if (language != LanguageNames.CSharp && language != LanguageNames.VisualBasic)
+            if (language != LanguageNames.CSharp)
             {
                 throw new ArgumentException("Unsupported Language");
             }
@@ -190,23 +159,20 @@ namespace AsyncAnalyzers.Test.Verifiers
         /// <returns>A Project created out of the Documents created from the source strings</returns>
         private static Project CreateProject(string[] sources, string language = LanguageNames.CSharp)
         {
-            var fileNamePrefix = DefaultFilePathPrefix;
-            var fileExt = language == LanguageNames.CSharp ? CSharpDefaultFileExt : VisualBasicDefaultExt;
-
             var projectId = ProjectId.CreateNewId(debugName: TestProjectName);
 
             var solution = new AdhocWorkspace()
                 .CurrentSolution
                 .AddProject(projectId, TestProjectName, TestProjectName, language)
-                .AddMetadataReference(projectId, _corlibReference)
-                .AddMetadataReference(projectId, _systemCoreReference)
-                .AddMetadataReference(projectId, _cSharpSymbolsReference)
-                .AddMetadataReference(projectId, _codeAnalysisReference);
+                .AddMetadataReference(projectId, CorlibReference)
+                .AddMetadataReference(projectId, SystemCoreReference)
+                .AddMetadataReference(projectId, CSharpSymbolsReference)
+                .AddMetadataReference(projectId, CodeAnalysisReference);
 
             var count = 0;
             foreach (var source in sources)
             {
-                var newFileName = fileNamePrefix + count + "." + fileExt;
+                var newFileName = DefaultFilePathPrefix + count + "." + CSharpDefaultFileExt;
                 var documentId = DocumentId.CreateNewId(projectId, debugName: newFileName);
                 solution = solution.AddDocument(documentId, newFileName, SourceText.From(source));
                 count++;
