@@ -12,7 +12,7 @@ develop|[![Build Status](https://travis-ci.org/holthe/AsyncAnalyzers.svg?branch=
 
 ## Getting Started
 
-### Install NuGet package
+### Install NuGet package (preferred method)
 
 To install **AsyncAnalyzers**, run the following command in the [Package Manager Console](https://docs.nuget.org/docs/start-here/using-the-package-manager-console)
 ```
@@ -24,10 +24,26 @@ or the following command for [.NET CLI](https://docs.microsoft.com/en-us/dotnet/
 dotnet add package AsyncAnalyzers
 ```
 
+### Install from GitHub Releases
+
+[Travis CI](https://travis-ci.org) deploys the latest NuGet package to [Github Releases](https://github.com/holthe/AsyncAnalyzers/releases) along with its SHA-1 hash after it has been pushed to the [NuGet Gallery](https://www.nuget.org/packages/AsyncAnalyzers).
+
+1. Download the [latest release](https://github.com/holthe/AsyncAnalyzers/releases) (`.nupkg` and `.sha1` files) and check the SHA-1 hash of the downloaded files, e.g. for release v1.1.3:
+```
+sha1sum -c AsyncAnalyzers.1.1.3.0.nupkg.sha1
+```
+
+which should output `AsyncAnalyzers.1.1.3.0.nupkg: OK`.
+
+2. Install the downloaded package
+```
+Install-Package C:\[PathToThePackageDir]\AsyncAnalyzers.1.1.3.0.nupkg
+```
+
 ### Install from source
 
 1. Clone the repository and build the solution (optionally with `rake`).
-2. Add the analyzer to a given solution by copying the `AsyncAnalyzers.dll` and add a reference to it under References/Analyzers for each of the projects in the solution.
+2. Add the analyzer to a given solution by copying the `AsyncAnalyzers.dll` and add a reference to it under _References/Analyzers_ for each of the projects in the solution.
 
 #### Prerequisites
 

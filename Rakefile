@@ -94,6 +94,9 @@ task :nuget_pack do
             unless ok
                 puts "[!] Failed to pack NuGet package with status #{status.exitstatus}"
             end
+            
+            nupkg = "AsyncAnalyzers.#{@nuspec_version}.nupkg"
+            sh "sha1sum #{nupkg} > #{nupkg}.sha1"
         end
     end
 end
