@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using AsyncAnalyzers.Naming;
 using AsyncAnalyzers.Test.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;

@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Rename;
 
-namespace AsyncAnalyzers
+namespace AsyncAnalyzers.Naming
 {
     [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(AsyncSuffixCodeFixProvider))]
     [Shared]

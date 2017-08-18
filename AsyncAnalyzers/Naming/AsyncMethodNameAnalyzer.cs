@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace AsyncAnalyzers
+namespace AsyncAnalyzers.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AsyncMethodNameAnalyzer : DiagnosticAnalyzer

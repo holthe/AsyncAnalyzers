@@ -37,8 +37,10 @@
     <Compile Include="..\GlobalSuppressions.cs">
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
-    <Compile Include="AsyncSuffixCodeFixProvider.cs" />
-    <Compile Include="AsyncMethodNameAnalyzer.cs" />
+    <Compile Include="ConfigureAwait\ConfigureAwaitCodeFixProvider.cs" />
+    <Compile Include="ConfigureAwait\AsyncMethodConfigureAwaitAnalyzer.cs" />
+    <Compile Include="Naming\AsyncSuffixCodeFixProvider.cs" />
+    <Compile Include="Naming\AsyncMethodNameAnalyzer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
