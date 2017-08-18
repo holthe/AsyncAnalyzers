@@ -5,17 +5,12 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace AsyncAnalyzers.Test
 {
-    public class AsyncMethodNameAnalyzerTests : Verifiers.CodeFixVerifier
+    public class AsyncMethodNameAnalyzerTests : TestBase
     {
-        private const int SingleFileCount = 0;
-        private static readonly string DiagnosticLocationPath = $"{DefaultFilePathPrefix}{SingleFileCount}.{CSharpDefaultFileExt}";
-
-        private static readonly string TestDataInputDir = Path.Combine("TestData", "Input");
-        private static readonly string TestDataOutputDir = Path.Combine("TestData", "Output");
-
         private DiagnosticResult _expectedDiagnosticResultForMissingAsync;
         private DiagnosticResult _expectedDiagnosticResultForSuperfluousAsync;
 

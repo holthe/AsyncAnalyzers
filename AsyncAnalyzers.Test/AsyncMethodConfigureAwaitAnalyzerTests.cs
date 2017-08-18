@@ -1,22 +1,16 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 using AsyncAnalyzers.ConfigureAwait;
 using AsyncAnalyzers.Test.Helpers;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace AsyncAnalyzers.Test
 {
-    public class AsyncMethodConfigureAwaitAnalyzerTests : Verifiers.CodeFixVerifier
+    public class AsyncMethodConfigureAwaitAnalyzerTests : TestBase
     {
-        private const int SingleFileCount = 0;
-        private static readonly string DiagnosticLocationPath = $"{DefaultFilePathPrefix}{SingleFileCount}.{CSharpDefaultFileExt}";
-
-        private static readonly string TestDataInputDir = Path.Combine("TestData", "Input");
-        private static readonly string TestDataOutputDir = Path.Combine("TestData", "Output");
-
         private DiagnosticResult _expectedDiagnosticResultForMissingConfigureAwait;
 
         public AsyncMethodConfigureAwaitAnalyzerTests()
@@ -29,27 +23,11 @@ namespace AsyncAnalyzers.Test
             };
         }
 
-        [Fact]
-        public void LibraryMethod_NoConfigureAwaitFalse_DiagnosticFound_CanFix()
+        [Theory]
+        [InlineData("LibraryMethod.NoConfigureAwait.cs")]
+        [InlineData("LibraryMethod.ConfigureAwaitTrue.cs")]
+        public void LibraryMethod_NoConfigureAwaitFalse_DiagnosticFound_CanFix(string testFile)
         {
-            const string testFile = "LibraryMethod.NoConfigureAwait.cs";
-            var test = File.ReadAllText(Path.Combine(TestDataInputDir, testFile));
-            _expectedDiagnosticResultForMissingConfigureAwait.Locations =
-                new[]
-                {
-                    new DiagnosticResultLocation(DiagnosticLocationPath, 10, 20)
-                };
-
-            VerifyCSharpDiagnostic(test, _expectedDiagnosticResultForMissingConfigureAwait);
-
-            var fixtest = File.ReadAllText(Path.Combine(TestDataOutputDir, testFile));
-            VerifyCSharpFix(test, fixtest);
-        }
-
-        [Fact]
-        public void LibraryMethod_ConfigureAwaitTrue_DiagnosticFound_CanFix()
-        {
-            const string testFile = "LibraryMethod.ConfigureAwaitTrue.cs";
             var test = File.ReadAllText(Path.Combine(TestDataInputDir, testFile));
             _expectedDiagnosticResultForMissingConfigureAwait.Locations =
                 new[]
