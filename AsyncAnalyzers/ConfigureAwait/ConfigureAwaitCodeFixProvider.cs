@@ -10,25 +10,24 @@ using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
-using Microsoft.CodeAnalysis.Rename;
 
 namespace AsyncAnalyzers.ConfigureAwait
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ConfigureAwaitCodeFixProvider))]
     [Shared]
-    public class ConfigureAwaitCodeFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(ConfigureAwaitCodeFixProvider))]
+    public sealed class ConfigureAwaitCodeFixProvider : CodeFixProvider
     {
         private const string Title = "Apply .ConfigureAwait(false).";
 
-        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AsyncMethodConfigureAwaitAnalyzer.DiagnosticId);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(ConfigureAwaitAnalyzer.DiagnosticId);
 
-        public sealed override FixAllProvider GetFixAllProvider()
+        public override FixAllProvider GetFixAllProvider()
         {
             // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
             return WellKnownFixAllProviders.BatchFixer;
         }
 
-        public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+        public override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 
@@ -49,39 +48,40 @@ namespace AsyncAnalyzers.ConfigureAwait
 
         private static async Task<Document> AppendConfigureAwaitFalseAsync(Document document, AwaitExpressionSyntax node, CancellationToken cancellationToken)
         {
+            LiteralExpressionSyntax falseExpression;
+            InvocationExpressionSyntax fixedInvocationExpression;
+
             var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-            var expression = AsyncMethodConfigureAwaitAnalyzer.FindExpressionForConfigureAwait(node);
+            var expression = node.GetConfigureAwaitExpression();
             if (expression != null)
             {
-                var isConfigureAwait = (expression?.Expression as MemberAccessExpressionSyntax)?.Name.Identifier.Text.Equals("ConfigureAwait", StringComparison.Ordinal);
-
-                if (isConfigureAwait != true)
+                var memberAccess = expression.Expression as MemberAccessExpressionSyntax;
+                if (memberAccess == null || !memberAccess.HasIdentifier(ConfigureAwaitAnalyzer.ConfigureAwaitIdentifier))
                 {
-                    var falseExpression = SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression);
-                    var newExpression = SyntaxFactory.InvocationExpression(
-                        SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expression, SyntaxFactory.IdentifierName("ConfigureAwait")),
+                    falseExpression = SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression);
+                    fixedInvocationExpression = SyntaxFactory.InvocationExpression(
+                        SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, expression, SyntaxFactory.IdentifierName(ConfigureAwaitAnalyzer.ConfigureAwaitIdentifier)),
                         SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(new[] { SyntaxFactory.Argument(falseExpression) })));
-                    return document.WithSyntaxRoot(root.ReplaceNode(expression, newExpression.WithAdditionalAnnotations(Formatter.Annotation)));
+                    return document.WithSyntaxRoot(root.ReplaceNode(expression, fixedInvocationExpression.WithAdditionalAnnotations(Formatter.Annotation)));
                 }
 
-                if (expression.ArgumentList.Arguments.FirstOrDefault()?.Expression?.IsKind(SyntaxKind.FalseLiteralExpression) != true)
+                if (expression.IsFirstArgumentFalse())
                 {
-                    var falseExpression = SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression);
-                    var newExpression = SyntaxFactory.InvocationExpression(expression.Expression,
-                        SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(new[] { SyntaxFactory.Argument(falseExpression) })));
-                    return document.WithSyntaxRoot(root.ReplaceNode(expression, newExpression.WithAdditionalAnnotations(Formatter.Annotation)));
+                    throw new InvalidOperationException();
                 }
-            }
-            else
-            {
-                var falseExpression = SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression);
-                var newExpression = SyntaxFactory.InvocationExpression(
-                    SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, node.Expression, SyntaxFactory.IdentifierName("ConfigureAwait")),
+
+                falseExpression = SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression);
+                fixedInvocationExpression = SyntaxFactory.InvocationExpression(
+                    expression.Expression,
                     SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(new[] { SyntaxFactory.Argument(falseExpression) })));
-                return document.WithSyntaxRoot(root.ReplaceNode(node.Expression, newExpression.WithAdditionalAnnotations(Formatter.Annotation)));
+                return document.WithSyntaxRoot(root.ReplaceNode(expression, fixedInvocationExpression.WithAdditionalAnnotations(Formatter.Annotation)));
             }
 
-            throw new InvalidOperationException();
+            falseExpression = SyntaxFactory.LiteralExpression(SyntaxKind.FalseLiteralExpression);
+            fixedInvocationExpression = SyntaxFactory.InvocationExpression(
+                SyntaxFactory.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, node.Expression, SyntaxFactory.IdentifierName(ConfigureAwaitAnalyzer.ConfigureAwaitIdentifier)),
+                SyntaxFactory.ArgumentList(SyntaxFactory.SeparatedList(new[] { SyntaxFactory.Argument(falseExpression) })));
+            return document.WithSyntaxRoot(root.ReplaceNode(node.Expression, fixedInvocationExpression.WithAdditionalAnnotations(Formatter.Annotation)));
         }
     }
 }

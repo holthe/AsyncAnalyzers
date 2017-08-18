@@ -10,21 +10,21 @@ using Microsoft.CodeAnalysis.Rename;
 
 namespace AsyncAnalyzers.Naming
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(AsyncSuffixCodeFixProvider))]
     [Shared]
-    public class AsyncSuffixCodeFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(AsyncSuffixCodeFixProvider))]
+    public sealed class AsyncSuffixCodeFixProvider : CodeFixProvider
     {
         private const string Title = "Append missing or remove superfluous Async suffix.";
 
-        public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AsyncMethodNameAnalyzer.DiagnosticIdForMissingAsyncSuffix, AsyncMethodNameAnalyzer.DiagnosticIdForSuperfluousAsyncSuffix);
+        public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(AsyncMethodNameAnalyzer.DiagnosticIdForMissingAsyncSuffix, AsyncMethodNameAnalyzer.DiagnosticIdForSuperfluousAsyncSuffix);
 
-        public sealed override FixAllProvider GetFixAllProvider()
+        public override FixAllProvider GetFixAllProvider()
         {
             // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/FixAllProvider.md for more information on Fix All Providers
             return WellKnownFixAllProviders.BatchFixer;
         }
 
-        public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
+        public override async Task RegisterCodeFixesAsync(CodeFixContext context)
         {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
 

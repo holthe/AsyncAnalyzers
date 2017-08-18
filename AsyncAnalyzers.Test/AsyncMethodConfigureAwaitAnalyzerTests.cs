@@ -5,7 +5,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace AsyncAnalyzers.Test
 {
@@ -17,8 +16,8 @@ namespace AsyncAnalyzers.Test
         {
             _expectedDiagnosticResultForMissingConfigureAwait = new DiagnosticResult
             {
-                Id = AsyncMethodConfigureAwaitAnalyzer.DiagnosticId,
-                Message = string.Format(AsyncMethodConfigureAwaitAnalyzer.MessagForMissingConfigureAwait, "LibraryMethodAsync"),
+                Id = ConfigureAwaitAnalyzer.DiagnosticId,
+                Message = string.Format(ConfigureAwaitAnalyzer.MessagForMissingConfigureAwait, "LibraryMethodAsync"),
                 Severity = DiagnosticSeverity.Error
             };
         }
@@ -57,7 +56,7 @@ namespace AsyncAnalyzers.Test
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
         {
-            return new AsyncMethodConfigureAwaitAnalyzer();
+            return new ConfigureAwaitAnalyzer();
         }
     }
 }
