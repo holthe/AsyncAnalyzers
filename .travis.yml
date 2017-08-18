@@ -19,7 +19,7 @@ deploy:
   file_glob: true
   file:
     - "${RELEASE_NUGET}"
-    - "${RELEASE_NUGET}.sha1"
+    - "${RELEASE_NUGET}.sha256"
   on:
     repo: holthe/AsyncAnalyzers
     all_branches: true

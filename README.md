@@ -3,7 +3,7 @@
 
 ## Build Status
 
-Compilation and build status is provided by [Travis CI](https://travis-ci.org). The **VSIX** project is not being built at the moment.
+Compilation and build status are provided by [Travis CI](https://travis-ci.org). The **VSIX** project is not being built at the moment.
 
 Branch|Status
 ---|---
@@ -28,9 +28,9 @@ dotnet add package AsyncAnalyzers
 
 [Travis CI](https://travis-ci.org) deploys the latest NuGet package to [Github Releases](https://github.com/holthe/AsyncAnalyzers/releases) along with its SHA-1 hash after it has been pushed to the [NuGet Gallery](https://www.nuget.org/packages/AsyncAnalyzers).
 
-1. Download the [latest release](https://github.com/holthe/AsyncAnalyzers/releases) (`.nupkg` and `.sha1` files) and check the SHA-1 hash of the downloaded files, e.g. for release v1.1.3:
+1. Download the [latest release](https://github.com/holthe/AsyncAnalyzers/releases) (`.nupkg` and `.sha256` files) and check the SHA-256 hash of the downloaded `.nupkg` file, e.g. for release v1.1.3:
 ```
-sha1sum -c AsyncAnalyzers.1.1.3.0.nupkg.sha1
+sha256sum -c AsyncAnalyzers.1.1.3.0.nupkg.sha256
 ```
 
 which should output `AsyncAnalyzers.1.1.3.0.nupkg: OK`.
@@ -61,7 +61,7 @@ The tests are written using the `xUnit` testing framework and can be run directl
 rake xunit_tests
 ```
 
-which assumes that the solution has previously been built for **Release** configuration and that artifacts from this build is present in the output folders for the _AsyncAnalyzers_ and _AsyncAnalyzers.Test_ projects.
+which assumes that the solution has previously been built for **Release** configuration and that artifacts from this build are present in the output folders for the _AsyncAnalyzers_ and _AsyncAnalyzers.Test_ projects.
 
 ## License [![License](http://img.shields.io/:license-MIT-red.svg)](LICENSE.md)
 

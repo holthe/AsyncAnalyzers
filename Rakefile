@@ -96,7 +96,7 @@ task :nuget_pack do
             end
             
             nupkg = "AsyncAnalyzers.#{@nuspec_version}.nupkg"
-            sh "sha1sum #{nupkg} > #{nupkg}.sha1"
+            sh "sha256sum #{nupkg} > #{nupkg}.sha256"
         end
     end
 end
