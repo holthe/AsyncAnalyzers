@@ -19,14 +19,14 @@ namespace AsyncAnalyzers.Test
             {
                 Id = AsyncMethodNameAnalyzer.DiagnosticIdForMissingAsyncSuffix,
                 Message = string.Format(AsyncMethodNameAnalyzer.MessageFormatForMissingAsync, "X"),
-                Severity = DiagnosticSeverity.Error
+                Severity = DiagnosticSeverity.Warning
             };
 
             _expectedDiagnosticResultForSuperfluousAsync = new DiagnosticResult
             {
                 Id = AsyncMethodNameAnalyzer.DiagnosticIdForSuperfluousAsyncSuffix,
                 Message = string.Format(AsyncMethodNameAnalyzer.MessageFormatForSuperfluousAsync, "XAsync"),
-                Severity = DiagnosticSeverity.Error
+                Severity = DiagnosticSeverity.Warning
             };
         }
 

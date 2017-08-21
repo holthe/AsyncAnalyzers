@@ -15,10 +15,10 @@ namespace AsyncAnalyzers.ConfigureAwait
         public const string MessagForMissingConfigureAwait = "Consider using .ConfigureAwait(false) on async method '{0}'";
 
         private const string Category = "ConfigureAwait";
-        private const string TitleForMissingAsync = "Consider using .ConfigureAwait(false)";
-        private const string DescriptionForMissingAsync = "Async library methods must use .ConfigureAwait(false)";
+        private const string TitleForMissingConfigureAwait = "Consider using .ConfigureAwait(false)";
+        private const string DescriptionForMissingConfigureAwait = "Async library methods must use .ConfigureAwait(false)";
 
-        private static readonly DiagnosticDescriptor RuleForMissingConfigureAwait = new DiagnosticDescriptor(DiagnosticId, TitleForMissingAsync, MessagForMissingConfigureAwait, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: DescriptionForMissingAsync);
+        private static readonly DiagnosticDescriptor RuleForMissingConfigureAwait = new DiagnosticDescriptor(DiagnosticId, TitleForMissingConfigureAwait, MessagForMissingConfigureAwait, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: DescriptionForMissingConfigureAwait);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(RuleForMissingConfigureAwait);
 

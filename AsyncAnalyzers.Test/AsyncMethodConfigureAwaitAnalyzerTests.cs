@@ -18,7 +18,7 @@ namespace AsyncAnalyzers.Test
             {
                 Id = ConfigureAwaitAnalyzer.DiagnosticId,
                 Message = string.Format(ConfigureAwaitAnalyzer.MessagForMissingConfigureAwait, "LibraryMethodAsync"),
-                Severity = DiagnosticSeverity.Error
+                Severity = DiagnosticSeverity.Warning
             };
         }
 
@@ -31,7 +31,7 @@ namespace AsyncAnalyzers.Test
             _expectedDiagnosticResultForMissingConfigureAwait.Locations =
                 new[]
                 {
-                    new DiagnosticResultLocation(DiagnosticLocationPath, 10, 20)
+                    new DiagnosticResultLocation(DiagnosticLocationPath, 11, 20)
                 };
 
             VerifyCSharpDiagnostic(test, _expectedDiagnosticResultForMissingConfigureAwait);

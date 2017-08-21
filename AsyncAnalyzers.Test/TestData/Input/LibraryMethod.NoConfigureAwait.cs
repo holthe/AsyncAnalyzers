@@ -7,7 +7,8 @@ namespace AsyncAnalyzers.Test.TestData
     {
         public async Task XAsync()
         {
-            return await Library.LibraryMethodAsync();
+            var library = new Library();
+            return await library.Api.LibraryMethodAsync();
         }
     }
 }
