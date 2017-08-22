@@ -23,15 +23,15 @@ namespace AsyncAnalyzers.Test
         }
 
         [Theory]
-        [InlineData("LibraryMethod.NoConfigureAwait.cs")]
-        [InlineData("LibraryMethod.ConfigureAwaitTrue.cs")]
-        public void LibraryMethod_NoConfigureAwaitFalse_DiagnosticFound_CanFix(string testFile)
+        [InlineData("LibraryMethod.NoConfigureAwait.cs", 11, 20)]
+        [InlineData("LibraryMethod.ConfigureAwaitTrue.cs", 10, 20)]
+        public void LibraryMethod_NoConfigureAwaitFalse_DiagnosticFound_CanFix(string testFile, int diagnosticLine, int diagnosticColumn)
         {
             var test = File.ReadAllText(Path.Combine(TestDataInputDir, testFile));
             _expectedDiagnosticResultForMissingConfigureAwait.Locations =
                 new[]
                 {
-                    new DiagnosticResultLocation(DiagnosticLocationPath, 11, 20)
+                    new DiagnosticResultLocation(DiagnosticLocationPath, diagnosticLine, diagnosticColumn)
                 };
 
             VerifyCSharpDiagnostic(test, _expectedDiagnosticResultForMissingConfigureAwait);
