@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace AsyncAnalyzers
+namespace AsyncAnalyzers.Naming
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AsyncMethodNameAnalyzer : DiagnosticAnalyzer
@@ -20,8 +20,8 @@ namespace AsyncAnalyzers
         private const string TitleForSuperfluousAsync = "Only TAP methods must end with Async";
         private const string DescriptionForSuperfluousAsync = "Only TAP methods should have the Async suffix.";
 
-        private static readonly DiagnosticDescriptor RuleForMissingAsyncSuffix = new DiagnosticDescriptor(DiagnosticIdForMissingAsyncSuffix, TitleForMissingAsync, MessageFormatForMissingAsync, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: DescriptionForMissingAsync);
-        private static readonly DiagnosticDescriptor RuleForSuperfluousAsyncSuffix = new DiagnosticDescriptor(DiagnosticIdForSuperfluousAsyncSuffix, TitleForSuperfluousAsync, MessageFormatForSuperfluousAsync, Category, DiagnosticSeverity.Error, isEnabledByDefault: true, description: DescriptionForSuperfluousAsync);
+        private static readonly DiagnosticDescriptor RuleForMissingAsyncSuffix = new DiagnosticDescriptor(DiagnosticIdForMissingAsyncSuffix, TitleForMissingAsync, MessageFormatForMissingAsync, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: DescriptionForMissingAsync);
+        private static readonly DiagnosticDescriptor RuleForSuperfluousAsyncSuffix = new DiagnosticDescriptor(DiagnosticIdForSuperfluousAsyncSuffix, TitleForSuperfluousAsync, MessageFormatForSuperfluousAsync, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: DescriptionForSuperfluousAsync);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(RuleForMissingAsyncSuffix, RuleForSuperfluousAsyncSuffix);
 

@@ -105,6 +105,7 @@
     <Compile Include="..\GlobalSuppressions.cs">
       <Link>GlobalSuppressions.cs</Link>
     </Compile>
+    <Compile Include="AsyncMethodConfigureAwaitAnalyzerTests.cs" />
     <Compile Include="AsyncMethodNameAnalyzerTests.cs" />
     <Compile Include="Helpers\DiagnosticResultLocation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -153,6 +154,22 @@
     <Content Include="TestData\Input\GenericTask.NoAsyncSuffix.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestData\Input\LibraryMethod.NoConfigureAwait.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Input\LibraryMethod.ConfigureAwaitFalse.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Input\LibraryMethod.ConfigureAwaitTrue.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Output\LibraryMethod.ConfigureAwaitTrue.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TestData\Output\LibraryMethod.NoConfigureAwait.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="TestBase.cs" />
     <Compile Include="Verifiers\CodeFixVerifier.cs" />
     <Compile Include="Verifiers\DiagnosticVerifier.cs" />
   </ItemGroup>
