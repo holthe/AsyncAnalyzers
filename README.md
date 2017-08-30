@@ -1,5 +1,5 @@
 # AsyncAnalyzers [![Build Status](https://travis-ci.org/holthe/AsyncAnalyzers.svg?branch=master)](https://travis-ci.org/holthe/AsyncAnalyzers) [![Latest version](https://img.shields.io/nuget/v/AsyncAnalyzers.svg)](https://www.nuget.org/packages/AsyncAnalyzers) [![NuGet](https://img.shields.io/nuget/dt/AsyncAnalyzers.svg)](https://www.nuget.org/packages/AsyncAnalyzers) [![License](http://img.shields.io/:license-MIT-red.svg)](LICENSE.md)
-> This repository contains a TAP method naming diagnostic extension for the .NET Compiler Platform ("Roslyn").
+> This repository contains a set of diagnostic extensions for the .NET Compiler Platform ("Roslyn") regarding asynchronous practices.
 
 ## Build Status
 
@@ -28,16 +28,16 @@ dotnet add package AsyncAnalyzers
 
 [Travis CI](https://travis-ci.org) deploys the latest NuGet package to [Github Releases](https://github.com/holthe/AsyncAnalyzers/releases) along with its SHA-1 hash after it has been pushed to the [NuGet Gallery](https://www.nuget.org/packages/AsyncAnalyzers).
 
-1. Download the [latest release](https://github.com/holthe/AsyncAnalyzers/releases) (`.nupkg` and `.sha256` files) and check the SHA-256 hash of the downloaded `.nupkg` file, e.g. for release v1.1.4:
+1. Download the [latest release](https://github.com/holthe/AsyncAnalyzers/releases) (`.nupkg` and `.sha256` files) and check the SHA-256 hash of the downloaded `.nupkg` file, e.g. for release v1.1.5:
 ```
-sha256sum -c AsyncAnalyzers.1.1.4.0.nupkg.sha256
+sha256sum -c AsyncAnalyzers.1.1.5.0.nupkg.sha256
 ```
 
-which should output `AsyncAnalyzers.1.1.4.0.nupkg: OK`.
+which should output `AsyncAnalyzers.1.1.5.0.nupkg: OK`.
 
 2. Install the downloaded package
 ```
-Install-Package C:\[PathToThePackageDir]\AsyncAnalyzers.1.1.4.0.nupkg
+Install-Package C:\[PathToThePackageDir]\AsyncAnalyzers.1.1.5.0.nupkg
 ```
 
 ### Install from source
