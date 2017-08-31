@@ -112,8 +112,8 @@ task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] => [:nuget_p
         if (branch != @git_master and not branch.downcase().include? @git_travis_branch_pattern)
             puts "Can only execute nuget_push task on #{@git_master} or a Travis test branch... Was on #{branch}"
             next
-        
         end
+        
         nuget_api_key = args[:nuget_api_key]
         if (not nuget_api_key.nil?)
             @nuget_api_key = nuget_api_key
@@ -129,6 +129,19 @@ task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] => [:nuget_p
             unless ok
                 puts "[!] Failed to push NuGet package with status #{status.exitstatus}"
             end
+        end
+    end
+end
+
+desc 'Create tag'
+task :tag do
+    ver = SemVer.find
+    version = "v#{SemVer.new(ver.major, ver.minor, ver.patch).format "%M.%m.%p"}"
+    
+    tag_command = "git tag #{version} -m \"Release #{version}\""
+    sh "#{tag_command}", verbose: false do |ok, status|
+        unless ok
+            puts "[!] Failed to create tag with version #{version}"
         end
     end
 end
