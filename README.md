@@ -26,7 +26,7 @@ dotnet add package AsyncAnalyzers
 
 ### Install from GitHub Releases
 
-[Travis CI](https://travis-ci.org) deploys the latest NuGet package to [Github Releases](https://github.com/holthe/AsyncAnalyzers/releases) along with its SHA-256 hash after it has been pushed to the [NuGet Gallery](https://www.nuget.org/packages/AsyncAnalyzers).
+[Travis CI](https://travis-ci.org) deploys the latest NuGet package to [GitHub Releases](https://github.com/holthe/AsyncAnalyzers/releases) along with its SHA-256 hash after it has been pushed to the [NuGet Gallery](https://www.nuget.org/packages/AsyncAnalyzers).
 
 1. Download the [latest release](https://github.com/holthe/AsyncAnalyzers/releases) (`.nupkg` and `.sha256` files) and check the SHA-256 hash of the downloaded `.nupkg` file, e.g. for release v1.1.5:
 ```
