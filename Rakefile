@@ -43,7 +43,6 @@ end
 
 @nuspec_file = 'AsyncAnalyzers.nuspec'
 @nuspec_version = 'unknown'
-@git_master = 'master'
 @git_travis_branch_pattern = 'travis'
 
 task :default => [:restore, :build_solution, :xunit_tests]
@@ -109,8 +108,10 @@ task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] => [:nuget_p
             branch = %x[git rev-parse --abbrev-ref HEAD].gsub("\n",'')
         end
         
-        if (branch != @git_master and not branch.downcase().include? @git_travis_branch_pattern)
-            puts "Can only execute nuget_push task on #{@git_master} or a Travis test branch... Was on #{branch}"
+        ver = SemVer.find
+        version = "v#{SemVer.new(ver.major, ver.minor, ver.patch).format "%M.%m.%p"}"version
+        if (branch != version and not branch.downcase().include? @git_travis_branch_pattern)
+            puts "Can only execute nuget_push task on #{version} or a Travis test branch... Was on #{branch}"
             next
         end
         

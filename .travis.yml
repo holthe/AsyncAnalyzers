@@ -10,7 +10,7 @@ script:
   - bundle exec rake nuget_pack_and_push[$NuGetApiKey,$NuGetSource,$TRAVIS_BRANCH]
 before_deploy:
   - export RELEASE_NUGET=$(ls ./AsyncAnalyzers/bin/Release/AsyncAnalyzers.*.nupkg)
-  - echo "Deploying $RELEASE_NUGET and (sha1 checksum) to GitHub releases..."
+  - echo "Deploying $RELEASE_NUGET and (SHA-256 checksum) to GitHub releases..."
 deploy:
   provider: releases
   skip_cleanup: true
