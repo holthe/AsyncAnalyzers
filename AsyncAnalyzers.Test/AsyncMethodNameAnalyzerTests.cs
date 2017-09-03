@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using AsyncAnalyzers.Naming;
 using AsyncAnalyzers.Test.Helpers;
 using Microsoft.CodeAnalysis;
@@ -30,8 +31,20 @@ namespace AsyncAnalyzers.Test
             };
         }
 
+        [Theory]
+        [InlineData("AsyncTask.NoAsyncSuffix.Fact.cs")]
+        [InlineData("AsyncTask.NoAsyncSuffix.Test.cs")]
+        [InlineData("AsyncTask.NoAsyncSuffix.TestMethod.cs")]
+        [InlineData("AsyncTask.NoAsyncSuffix.Theory.cs")]
+        public async Task AsyncMethod_NoAsyncSuffix_TestAttribute_NoDiagnosticFound(string testFile)
+        {
+            var test = File.ReadAllText(Path.Combine(TestDataInputDir, testFile));
+
+            await VerifyCSharpDiagnosticAsync(test);
+        }
+
         [Fact]
-        public void MethodNotReturningIAsyncResult_AsyncSuffix_DiagnosticFound_CanFix()
+        public async Task MethodNotReturningIAsyncResult_AsyncSuffix_DiagnosticFound_CanFix()
         {
             const string testFile = "NoIAsyncResult.AsyncSuffix.cs";
             var test = File.ReadAllText(Path.Combine(TestDataInputDir, testFile));
@@ -41,10 +54,10 @@ namespace AsyncAnalyzers.Test
                     new DiagnosticResultLocation(DiagnosticLocationPath, 5, 20)
                 };
 
-            VerifyCSharpDiagnostic(test, _expectedDiagnosticResultForSuperfluousAsync);
+            await VerifyCSharpDiagnosticAsync(test, _expectedDiagnosticResultForSuperfluousAsync);
 
             var fixtest = File.ReadAllText(Path.Combine(TestDataOutputDir, testFile));
-            VerifyCSharpFix(test, fixtest);
+            await VerifyCSharpFixAsync(test, fixtest);
         }
 
         [Theory]
@@ -52,7 +65,7 @@ namespace AsyncAnalyzers.Test
         [InlineData("AsyncVoid.NoAsyncSuffix.cs", 5, 27)]
         [InlineData("GenericTask.NoAsyncSuffix.cs", 8, 26)]
         [InlineData("Task.NoAsyncSuffix.cs", 8, 21)]
-        public void VerifyMissingAsyncDiagnosticAndFix(string testFile, int diagnosticLine, int diagnosticColumn)
+        public async Task VerifyMissingAsyncDiagnosticAndFix(string testFile, int diagnosticLine, int diagnosticColumn)
         {
             var test = File.ReadAllText(Path.Combine(TestDataInputDir, testFile));
 
@@ -62,15 +75,15 @@ namespace AsyncAnalyzers.Test
                     new DiagnosticResultLocation(DiagnosticLocationPath, diagnosticLine, diagnosticColumn)
                 };
 
-            VerifyCSharpDiagnostic(test, _expectedDiagnosticResultForMissingAsync);
+            await VerifyCSharpDiagnosticAsync(test, _expectedDiagnosticResultForMissingAsync);
 
             var fixtest = File.ReadAllText(Path.Combine(TestDataOutputDir, testFile));
-            VerifyCSharpFix(test, fixtest);
+            await VerifyCSharpFixAsync(test, fixtest);
         }
 
         [Theory]
         [InlineData("NoIAsyncResult.AsyncSuffix.cs", 5, 20)]
-        public void VerifySuperfluousAsyncDiagnosticAndFix(string testFile, int diagnosticLine, int diagnosticColumn)
+        public async Task VerifySuperfluousAsyncDiagnosticAndFix(string testFile, int diagnosticLine, int diagnosticColumn)
         {
             var test = File.ReadAllText(Path.Combine(TestDataInputDir, testFile));
 
@@ -80,10 +93,10 @@ namespace AsyncAnalyzers.Test
                     new DiagnosticResultLocation(DiagnosticLocationPath, diagnosticLine, diagnosticColumn)
                 };
 
-            VerifyCSharpDiagnostic(test, _expectedDiagnosticResultForSuperfluousAsync);
+            await VerifyCSharpDiagnosticAsync(test, _expectedDiagnosticResultForSuperfluousAsync);
 
             var fixtest = File.ReadAllText(Path.Combine(TestDataOutputDir, testFile));
-            VerifyCSharpFix(test, fixtest);
+            await VerifyCSharpFixAsync(test, fixtest);
         }
 
         [Theory]
@@ -92,11 +105,11 @@ namespace AsyncAnalyzers.Test
         [InlineData("DelegateVoid.NoAsyncSuffix.cs")]
         [InlineData("GenericramaTask.AsyncSuffix.cs")]
         [InlineData("Task.AsyncSuffix.cs")]
-        public void VerifyNoDiagnostic(string testFile)
+        public async Task VerifyNoDiagnostic(string testFile)
         {
             var test = File.ReadAllText(Path.Combine(TestDataInputDir, testFile));
 
-            VerifyCSharpDiagnostic(test);
+            await VerifyCSharpDiagnosticAsync(test);
         }
 
         protected override CodeFixProvider GetCSharpCodeFixProvider()
