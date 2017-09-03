@@ -52,7 +52,7 @@ namespace AsyncAnalyzers.ConfigureAwait
             InvocationExpressionSyntax fixedInvocationExpression;
 
             var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
-            var expression = node.GetConfigureAwaitExpression();
+            var expression = node.GetInvocationExpressionSyntax();
             if (expression != null)
             {
                 var memberAccess = expression.Expression as MemberAccessExpressionSyntax;

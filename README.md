@@ -43,7 +43,7 @@ Install-Package C:\[PathToThePackageDir]\AsyncAnalyzers.1.1.5.0.nupkg
 ### Install from source
 
 1. Clone the repository and build the solution (optionally with `rake`).
-2. Add the analyzer to a given solution by copying the `AsyncAnalyzers.dll` and add a reference to it under _References/Analyzers_ for each of the projects in the solution.
+2. Add the analyzer to a given solution by copying the `AsyncAnalyzers.dll` and adding a reference to it under _References/Analyzers_ for each of the projects in the solution.
 
 #### Prerequisites
 
@@ -56,7 +56,7 @@ Note that this requires ruby version >= 2.1.0.
 
 ## Running the tests
 
-The tests are written using the `xUnit` testing framework and can be run directly from within **Visual Studio** or from the commandline using `rake`. The `default` task in `Rakefile` run the tests after performing a **NuGet** package restore and building the solution for **Release**, so one can simply issue the `rake` command. Alternately, run the `xunit_tests` task directly:
+The tests are written using the `xUnit` testing framework and can be run directly from within **Visual Studio** or from the commandline using `rake`. The `default` task in `Rakefile` runs the tests after performing a **NuGet** package restore and building the solution for **Release**, so one can simply issue the `rake` command. Alternately, run the `xunit_tests` task directly:
 ```
 rake xunit_tests
 ```

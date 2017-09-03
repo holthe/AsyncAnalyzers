@@ -51,7 +51,7 @@ namespace AsyncAnalyzers.Naming
             var newName = $"{syntaxToken.Text}Async";
 
             // Get the symbol representing the type to be renamed.
-            var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
+            var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
             var typeSymbol = semanticModel.GetDeclaredSymbol(syntaxToken.Parent, cancellationToken);
 
             // Produce a new solution that has all references to that type renamed, including the declaration.
@@ -69,7 +69,7 @@ namespace AsyncAnalyzers.Naming
             var newName = syntaxToken.Text.Substring(0, syntaxToken.Text.Length - 5);
 
             // Get the symbol representing the type to be renamed.
-            var semanticModel = await document.GetSemanticModelAsync(cancellationToken);
+            var semanticModel = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
             var typeSymbol = semanticModel.GetDeclaredSymbol(syntaxToken.Parent, cancellationToken);
 
             // Produce a new solution that has all references to that type renamed, including the declaration.
