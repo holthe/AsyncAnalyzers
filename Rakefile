@@ -109,7 +109,7 @@ task :nuget_pack_and_push, [:nuget_api_key, :nuget_source, :branch] => [:nuget_p
         end
         
         ver = SemVer.find
-        version = "v#{SemVer.new(ver.major, ver.minor, ver.patch).format "%M.%m.%p"}"version
+        version = "v#{SemVer.new(ver.major, ver.minor, ver.patch).format "%M.%m.%p"}"
         if (branch != version and not branch.downcase().include? @git_travis_branch_pattern)
             puts "Can only execute nuget_push task on #{version} or a Travis test branch... Was on #{branch}"
             next
